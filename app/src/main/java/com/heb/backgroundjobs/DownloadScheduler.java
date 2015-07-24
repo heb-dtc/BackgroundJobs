@@ -25,8 +25,8 @@ public class DownloadScheduler {
         this.downloadWorkQueue = downloadWorkQueue;
     }
 
-    public void downloadMedia(String url) {
-        DownloadCoverTask downloadCoverTask = new DownloadCoverTask(threadPool, url);
+    public void downloadContent(Content content) {
+        DownloadCoverTask downloadCoverTask = new DownloadCoverTask(threadPool, content.getUrlCover());
         downloadCoverTask.retrieveCover();
     }
 }

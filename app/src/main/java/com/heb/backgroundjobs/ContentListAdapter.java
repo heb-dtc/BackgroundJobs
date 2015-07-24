@@ -17,9 +17,15 @@ public class ContentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_CONTENT = 1;
 
     private List<Content> contentList;
+    private final ClickHandler clickHandler;
 
-    public ContentListAdapter() {
+    public interface ClickHandler {
+        void onDownloadButtonClicked();
+    }
+
+    public ContentListAdapter(ClickHandler clickHandler) {
         contentList = new ArrayList<>();
+        this.clickHandler = clickHandler;
     }
 
     @Override
@@ -40,7 +46,7 @@ public class ContentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (viewHolder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
             Content content = getItem(position);
-
+            itemViewHolder.initWithContent(content);
             itemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -52,7 +58,7 @@ public class ContentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             footerViewHolder.downloadButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //itemClickListener.onButtonClick(view);
+                    clickHandler.onDownloadButtonClicked();
                 }
             });
         }
@@ -60,6 +66,7 @@ public class ContentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public void addContent(Content content) {
         contentList.add(content);
+        notifyItemInserted(0);
     }
 
     @Override
@@ -96,6 +103,10 @@ public class ContentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             super(itemView);
             coverView = (ImageView) itemView.findViewById(R.id.content_cover_view);
             titleView = (TextView) itemView.findViewById(R.id.content_title_view);
+        }
+
+        public void initWithContent(Content content) {
+            titleView.setText(content.getTitle());
         }
     }
 
